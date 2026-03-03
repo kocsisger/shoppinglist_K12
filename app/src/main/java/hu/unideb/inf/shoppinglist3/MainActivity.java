@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -16,12 +17,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+    TextView itemsTextView;
+
     ActivityResultLauncher activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             activityResult -> {
+                if (activityResult.getResultCode()!=RESULT_OK) return;
+
                 Log.d("ITEMS_TEST", "I have returned");
-                String item = activityResult.getData().getStringExtra("ITEM");
+                String item = activityResult.getData().getStringExtra(ItemsActivity.ITEM);
                 Log.d("ITEMS_TEST", item);
+
+                if (itemsTextView.getText().toString().equals( getString(R.string.empty_list) ))
+                    itemsTextView.setText(item + "\n");
+                else
+                    itemsTextView.append(item + "\n");
             }
     );
 
@@ -35,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        itemsTextView = findViewById(R.id.itemsTextView);
     }
 
     public void handleAddButtonPushed(View view) {
