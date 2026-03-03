@@ -1,8 +1,10 @@
 package hu.unideb.inf.shoppinglist3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -29,6 +31,9 @@ public class ItemsActivity extends AppCompatActivity {
     }
 
     public void handleAddItem(View view) {
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra("ITEM", ((Button)view).getText().toString() );
+        setResult(RESULT_OK, replyIntent);
         finish();
     }
 }

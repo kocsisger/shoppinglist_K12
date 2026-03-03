@@ -18,11 +18,10 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult o) {
-                    Log.d("ITEMS_TEST" ,"I have returned");
-                }
+            activityResult -> {
+                Log.d("ITEMS_TEST", "I have returned");
+                String item = activityResult.getData().getStringExtra("ITEM");
+                Log.d("ITEMS_TEST", item);
             }
     );
 
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleAddButtonPushed(View view) {
         Intent intent = new Intent(this, ItemsActivity.class);
-        startActivity(intent);
+        //startActivity(intent);
+        activityResultLauncher.launch(intent);
     }
 }
