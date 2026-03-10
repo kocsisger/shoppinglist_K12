@@ -1,6 +1,7 @@
 package hu.unideb.inf.shoppinglist3;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,29 +12,34 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TEXTVIEW_CONTENTS = "TEXTVIEW_CONTENTS";
     TextView itemsTextView;
 
     ActivityResultLauncher activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             activityResult -> {
-                if (activityResult.getResultCode()!=RESULT_OK) return;
+                if (activityResult.getResultCode() != RESULT_OK) return;
 
                 Log.d("ITEMS_TEST", "I have returned");
                 String item = activityResult.getData().getStringExtra(ItemsActivity.ITEM);
                 Log.d("ITEMS_TEST", item);
 
-                if (itemsTextView.getText().toString().equals( getString(R.string.empty_list) ))
+                if (itemsTextView.getText().toString().equals(getString(R.string.empty_list)))
                     itemsTextView.setText(item + "\n");
                 else
                     itemsTextView.append(item + "\n");
             }
     );
+
+    SharedPreferences sharedPreferences;
+    String sharedPrefFileName = "shrdprf";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,29 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        sharedPreferences = getSharedPreferences(sharedPrefFileName, MODE_PRIVATE);
+
         itemsTextView = findViewById(R.id.itemsTextView);
+        if (savedInstanceState != null)
+            itemsTextView.setText(savedInstanceState.getString(TEXTVIEW_CONTENTS));
+        else
+            itemsTextView.setText(
+                    sharedPreferences.getString(TEXTVIEW_CONTENTS, getString(R.string.empty_list))
+            );
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TEXTVIEW_CONTENTS, itemsTextView.getText().toString());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sharedPreferences.edit()
+                .putString(TEXTVIEW_CONTENTS, itemsTextView.getText().toString())
+                .apply();
     }
 
     public void handleAddButtonPushed(View view) {
