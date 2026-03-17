@@ -38,4 +38,12 @@ public class ItemsActivity extends AppCompatActivity {
         setResult(RESULT_OK, replyIntent);
         finish();
     }
+
+    private void displayColorFragment(){
+        ColorFragment colorFragment = new ColorFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, colorFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 }
