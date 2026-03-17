@@ -32,8 +32,6 @@ public class ColorFragment extends Fragment {
             if (chackedId==R.id.redRadioButton) color=getString(R.string.red);
                     else color=getString(R.string.green);
         });
-
-
         return rootView;
     }
 }
