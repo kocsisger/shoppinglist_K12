@@ -82,4 +82,8 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(intent);
         activityResultLauncher.launch(intent);
     }
+
+    public void handleClearButtonPushed(View view) {
+        itemsTextView.setText("");
+    }
 }

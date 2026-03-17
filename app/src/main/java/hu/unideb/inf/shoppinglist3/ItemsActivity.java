@@ -37,14 +37,15 @@ public class ItemsActivity extends AppCompatActivity {
     public void handleAddItem(View view) {
         String value = ((Button) view).getText().toString();
 
-        if (value.equals(getString(R.string.apple)))
+        if (value.equals(getString(R.string.apple))) {
             if (colorFragmentIsNotShown) {
                 displayColorFragment();
                 colorFragmentIsNotShown = false;
                 return;
-            }else{
+            } else {
                 value += " " + colorFragment.getColor();
             }
+        }
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(ITEM, value);
@@ -53,6 +54,7 @@ public class ItemsActivity extends AppCompatActivity {
     }
 
     ColorFragment colorFragment;
+
     private void displayColorFragment() {
         colorFragment = new ColorFragment();
         getSupportFragmentManager().beginTransaction()
