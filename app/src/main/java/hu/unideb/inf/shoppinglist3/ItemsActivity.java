@@ -32,15 +32,29 @@ public class ItemsActivity extends AppCompatActivity {
         });
     }
 
+    private boolean colorFragmentIsNotShown = true;
+
     public void handleAddItem(View view) {
+        String value = ((Button) view).getText().toString();
+
+        if (value.equals(getString(R.string.apple)))
+            if (colorFragmentIsNotShown) {
+                displayColorFragment();
+                colorFragmentIsNotShown = false;
+                return;
+            }else{
+                value += " " + colorFragment.getColor();
+            }
+
         Intent replyIntent = new Intent();
-        replyIntent.putExtra(ITEM, ((Button)view).getText().toString() );
+        replyIntent.putExtra(ITEM, value);
         setResult(RESULT_OK, replyIntent);
         finish();
     }
 
-    private void displayColorFragment(){
-        ColorFragment colorFragment = new ColorFragment();
+    ColorFragment colorFragment;
+    private void displayColorFragment() {
+        colorFragment = new ColorFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, colorFragment)
                 .addToBackStack(null)
